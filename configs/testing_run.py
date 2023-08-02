@@ -10,7 +10,7 @@ _base_= '/opt/ml/item_box_competition/mmdetection/configs/cascade_rcnn/cascade_r
 # )
 
 # Modify dataset related settings
-dataset_type = 'COCODataset'
+dataset_type = 'CocoDataset'
 classes = (
   '불닭볶음면 할라피뇨치즈'
 , '불닭볶음면 화끈한매운맛'
