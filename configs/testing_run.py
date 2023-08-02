@@ -9,6 +9,18 @@ _base_= '/opt/ml/item_box_competition/Future_technology/mmdetection/configs/casc
 #     )
 # )
 
+# Albumentations의 Cutout을 포함하는 변환 함수를 정의합니다.
+cutout_transform = [
+    dict(
+        type='Cutout',
+        num_holes=3,
+        max_h_size=30,
+        max_w_size=300,
+        fill_value=0,
+        always_apply=False,
+        p=0.5)
+    ]
+
 # Modify dataset related settings
 dataset_type = 'CocoDataset'
 classes = (
@@ -113,11 +125,37 @@ classes = (
 , '오뚜기 열 참깨라면'
 , '오뚜기 콕콕콕 치즈볶이'
 )
+img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='Resize', img_scale=(300, 300), keep_ratio=True),
+    dict(type='Albu', transforms=cutout_transform,
+         bbox_params=dict(
+            type='BboxParams',
+            format='pascal_voc',
+            label_fields=['gt_labels'],
+            min_visibility=0.0,
+            filter_lost_elements=True),
+        keymap={
+            'img': 'image',
+            'gt_masks': 'masks',
+            'gt_bboxes': 'bboxes'
+        }),
+    dict(type='RandomFlip', flip_ratio=0.5),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
+]
+
 data = dict(
     train=dict(
         img_prefix='/opt/ml/item_box_competition/data/train/',
         classes=classes,
-        ann_file='/opt/ml/item_box_competition/data/train.json'),
+        ann_file='/opt/ml/item_box_competition/data/train.json',
+        pipeline=train_pipeline),
     val=dict(
         img_prefix='/opt/ml/item_box_competition/data/validation/',
         classes=classes,
