@@ -1,6 +1,6 @@
 # https://mmdetection.readthedocs.io/en/v2.28.2/2_new_data_model.html
 
-_base_= '/opt/ml/item_box_competition/mmdetection/configs/cascade_rcnn/cascade_rcnn_r50_fpn_20e_coco.py'
+_base_= '/opt/ml/item_box_competition/Future_technology/mmdetection/configs/cascade_rcnn/cascade_rcnn_r50_fpn_20e_coco.py'
 
 # # change model's num classes
 # model = dict(
