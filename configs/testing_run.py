@@ -1,6 +1,6 @@
 # https://mmdetection.readthedocs.io/en/v2.28.2/2_new_data_model.html
 
-_base_= '/opt/ml/item_box_competition/Future_technology/mmdetection/configs/cascade_rcnn/cascade_rcnn_r50_fpn_20e_coco.py'
+_base_= '../mmdetection/configs/cascade_rcnn/cascade_rcnn_r50_fpn_20e_coco.py'
 
 # # change model's num classes
 # model = dict(
@@ -9,17 +9,7 @@ _base_= '/opt/ml/item_box_competition/Future_technology/mmdetection/configs/casc
 #     )
 # )
 
-# Albumentations의 Cutout을 포함하는 변환 함수를 정의합니다.
-cutout_transform = [
-    dict(
-        type='Cutout',
-        num_holes=3,
-        max_h_size=30,
-        max_w_size=300,
-        fill_value=0,
-        always_apply=False,
-        p=0.5)
-    ]
+
 
 # Modify dataset related settings
 dataset_type = 'CocoDataset'
@@ -125,24 +115,44 @@ classes = (
 , '오뚜기 열 참깨라면'
 , '오뚜기 콕콕콕 치즈볶이'
 )
+# retinanet 돌릴 때 풀면 됨
+# model = dict(
+#     bbox_head=dict(
+#         type='RetinaHead',
+#         num_classes=100
+#     )
+# )
+
+# Albumentations의 Cutout을 포함하는 변환 함수를 정의합니다.
+cutout_transform = [
+    dict(
+        type='Cutout',
+        num_holes=8,
+        max_h_size=20,
+        max_w_size=300,
+        fill_value=0,
+        always_apply=False,
+        p=0.5)
+    ]
+
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
-    dict(type='LoadImageFromFile'),
-    dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', img_scale=(300, 300), keep_ratio=True),
-    dict(type='Albu', transforms=cutout_transform,
-         bbox_params=dict(
-            type='BboxParams',
-            format='pascal_voc',
-            label_fields=['gt_labels'],
-            min_visibility=0.0,
-            filter_lost_elements=True),
-        keymap={
-            'img': 'image',
-            'gt_masks': 'masks',
-            'gt_bboxes': 'bboxes'
-        }),
+    # (1333, 640), (1333, 800)
+    dict(type='Resize', img_scale=[(700, 700)], keep_ratio=True),
+    dict(type='Mosaic', img_scale=(1333, 800)),
+    # dict(type='Albu', transforms=cutout_transform,
+    #      bbox_params=dict(
+    #         type='BboxParams',
+    #         format='coco',
+    #         label_fields=['gt_labels'],
+    #         min_visibility=0.0,
+    #         filter_lost_elements=True),
+    #     keymap={
+    #         'img': 'image',
+    #         'gt_masks': 'masks',
+    #         'gt_bboxes': 'bboxes'
+    #     }),
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
@@ -150,22 +160,105 @@ train_pipeline = [
     dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
 ]
 
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=(1333, 800),
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='Pad', size_divisor=32),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img']),
+        ])
+]
+
 data = dict(
     train=dict(
+        _delete_=True,
+        type='MultiImageMixDataset',
+        dataset=dict(
+            type=dataset_type,
+            img_prefix='/opt/ml/item_box_competition/data/train/',
+            classes=classes,
+            ann_file='/opt/ml/item_box_competition/data/modi_train.json',
+            pipeline=[
+                dict(type='LoadImageFromFile'),
+                dict(type='LoadAnnotations', with_bbox=True)
+            ],
+            filter_empty_gt=False,
+        ),
+        pipeline=train_pipeline,
+        ),
+    val=dict(
+        type=dataset_type,
         img_prefix='/opt/ml/item_box_competition/data/train/',
         classes=classes,
-        ann_file='/opt/ml/item_box_competition/data/train.json',
-        pipeline=train_pipeline),
-    val=dict(
-        img_prefix='/opt/ml/item_box_competition/data/validation/',
-        classes=classes,
-        ann_file='/opt/ml/item_box_competition/data/validation.json'),
+        ann_file='/opt/ml/item_box_competition/data/modi_train.json',
+        pipeline=test_pipeline),
     test=dict(
+        type=dataset_type,
         img_prefix='balloon/val/',
         classes=classes,
         ann_file='balloon/val/annotation_coco.json'))
 
+# data = dict(
+#     train=dict(
+#         img_prefix='/opt/ml/item_box_competition/data/train/',
+#         classes=classes,
+#         ann_file='/opt/ml/item_box_competition/data/train.json'),
+#     val=dict(
+#         img_prefix='/opt/ml/item_box_competition/data/validation/',
+#         classes=classes,
+#         ann_file='/opt/ml/item_box_competition/data/validation.json'),
+#     test=dict(
+#         img_prefix='balloon/val/',
+#         classes=classes,
+#         ann_file='balloon/val/annotation_coco.json'))
+
 # We can use the pre-trained Mask RCNN model to obtain higher performance
+# load_from = 'https://download.openmmlab.com/mmdetection/v2.0/retinanet/retinanet_r50_fpn_mstrain_3x_coco/retinanet_r50_fpn_mstrain_3x_coco_20210718_220633-88476508.pth'
+
+# cascade
 load_from = 'https://download.openmmlab.com/mmdetection/v2.0/cascade_rcnn/cascade_rcnn_r50_fpn_20e_coco/cascade_rcnn_r50_fpn_20e_coco_bbox_mAP-0.41_20200504_175131-e9872a90.pth'
+
+# optimizer
+optimizer = dict(
+    type='AdamW',
+    lr=0.000025,
+    betas=(0.9, 0.999),
+    weight_decay=0.05,
+    paramwise_cfg=dict(
+        custom_keys={
+            'absolute_pos_embed': dict(decay_mult=0.),
+            'relative_position_bias_table': dict(decay_mult=0.),
+            'norm': dict(decay_mult=0.)
+            }
+        )
+    )
+optimizer_config = dict(grad_clip=None)
+# learning policy
+lr_config = dict(
+    _delete_=True,
+    policy='CosineRestart',
+    warmup='linear',
+    warmup_iters=300,
+    warmup_ratio=0.001,
+    periods=[1200, 2400, 3600, 4800, 6000],
+    restart_weights=[1, 0.85, 0.75, 0.7, 0.6],
+    by_epoch=False,
+    min_lr=5e-6)
+# lr_config = dict(
+#     policy='CosineRestart',
+#     warmup='linear',
+#     warmup_iters=1099,
+#     warmup_ratio=0.001,
+#     periods=[5495, 5495, 6594, 8792, 8792],
+#     restart_weights=[1, 0.85, 0.75, 0.7, 0.6],
+#     by_epoch=False,
+#     min_lr=5e-06)
 
 runner = dict(max_epochs=40)

@@ -21,6 +21,7 @@ from mmdet.utils import (collect_env, get_device, get_root_logger,
                          replace_cfg_vals, rfnext_init_model,
                          setup_multi_processes, update_data_root)
 
+from tensorboardX import SummaryWriter
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
@@ -241,7 +242,6 @@ def main():
         validate=(not args.no_validate),
         timestamp=timestamp,
         meta=meta)
-
 
 if __name__ == '__main__':
     main()
