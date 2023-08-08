@@ -1,6 +1,6 @@
 # Future_technology
-미래 기술 챌린지 대회 환경 및 기록
-[대회 공고]()
+미래 기술 챌린지 대회 환경 및 기록  
+[대회 공고](https://github.com/Algorithm-Study/Future_technology/blob/main/images/%EB%AF%B8%EB%9E%98%EA%B8%B0%EC%88%A0%EC%B1%8C%EB%A6%B0%EC%A7%80.jpg)
 
 ## 과제
 **비전을 활용한 스마트 검수**
