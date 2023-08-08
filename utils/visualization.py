@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 from PIL import Image
 
-annotation_file="/workspace/item_box_competition/data/modi_validation.json"
+annotation_file="/workspace/item_box_competition/data/validation.json"
 bbox_file="/workspace/SKU110K-DenseDet/out.bbox.json"
 image_prefix="/workspace/item_box_competition/data/validation/"
 
@@ -22,4 +22,4 @@ for i in range(1,46):
         if e['image_id']==IMAGE_ID and e['score']>0.5:
             ax.add_patch(plt.Rectangle((e['bbox'][0],e['bbox'][1]),e['bbox'][2],e['bbox'][3],fill=False,edgecolor='red',linewidth=1))
             
-    plt.savefig(f'eval/savefig_default_{i}.png')
+    plt.savefig(f'/workspace/eval/savefig_default_{i}.png')
