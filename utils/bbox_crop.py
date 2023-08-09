@@ -4,7 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 
-def crop_and_save_images(json_path, image_dir, output_dir):
+def crop_and_save_images(json_path, image_dir, output_dir, csv_filename):
     # Load COCO format JSON
     with open(json_path, 'r', encoding='utf-8') as json_file:
         coco_data = json.load(json_file)
@@ -29,7 +29,7 @@ def crop_and_save_images(json_path, image_dir, output_dir):
         cropped_image = image[y:y + h, x:x + w]
 
         # Save the cropped image
-        output_filename = f"cropped_{image_filename}"
+        output_filename = f"cropped_{annotation['id']}_{image_filename}"
         print(output_filename)
         output_path = os.path.join(output_dir, output_filename)
         cv2.imwrite(output_path, cropped_image)
@@ -38,12 +38,12 @@ def crop_and_save_images(json_path, image_dir, output_dir):
         
     data = {'file_name': filenames, 'category': classes}
     df = pd.DataFrame(data)
-    csv_filename = 'train_cropped.csv'
     df.to_csv('/workspace/item_box_competition/data/'+csv_filename, index = False)
 
 if __name__ == "__main__":
-    json_path = "/workspace/item_box_competition/data/train.json"
-    image_dir = "/workspace/item_box_competition/data/train"
-    output_dir = "/workspace/item_box_competition/data/train_cropped"
-
-    crop_and_save_images(json_path, image_dir, output_dir)
+    json_path = "/workspace/item_box_competition/data/validation.json"
+    image_dir = "/workspace/item_box_competition/data/validation"
+    output_dir = "/workspace/item_box_competition/data/validation_crawled"
+    csv_filename = 'val_cropped_real.csv'
+    
+    crop_and_save_images(json_path, image_dir, output_dir, csv_filename)
