@@ -12,14 +12,16 @@ echo "Object Detection Done"
 cd /workspace/Future_technology
 /opt/conda/bin/python utils/out_bbox_crop.py
 
+echo "Crop Done"
 # Classification with cropped dataset 
-
 
 /opt/conda/bin/python classification/test.py
 
 echo "Classification Done"
 # Merge bboxes which is adjacent to each other
 /opt/conda/bin/python utils/bbox_merge_IOU.py
+
+echo "Merge Done"
 
 # Checking Times Spent during full pipeline
 finish=`date +%s.%N`

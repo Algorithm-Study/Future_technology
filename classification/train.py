@@ -27,13 +27,13 @@ def seed_config(seed):
 #  Hyperparameters
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-LEARNING_RATE=0.0005 #1e-4~1e-5
+LEARNING_RATE=0.0001 #1e-4~1e-5
 BATCH_SIZE = 16
 EPOCHS = 500
 VAL_INTERVAL=2
 SEED=777
 CLASS_NUM=100
-IMAGE_SIZE=448
+IMAGE_SIZE=224
 seed_config(SEED)
 ####################
 

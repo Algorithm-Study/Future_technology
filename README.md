@@ -23,3 +23,9 @@
 
 ## 참고 자료
 
+|      Description      | Performance (Accuracy) |
+| :-------------------: | :--------------------: |
+| LR=0.001 IMGSIZE=224  |           32           |
+| LR=0.0005 IMGSIZE=224 |     35 at 45 epoch     |
+| LR=0.0005 IMGSIZE=448 |     25 at 46 epoch     |
+|                       |                        |
