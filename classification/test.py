@@ -64,24 +64,9 @@ with torch.no_grad():
 # evalutation
 
 
-# json_path = '/workspace/Future_technology/detection/SKU110K-DenseDet/out.bbox.json'
-# save_path= "/workspace/item_box_competition/model/result_bbox.json"
-# anns=json.load(open(json_path, 'r'))
-# new_json=[]
-# # TODO: 이미지 순서, confidence 순서
-# for i, ann in enumerate(test_set.image_paths):
-#     ann_id=int(ann.split('/')[-1][:4])
-#     e=anns[ann_id]
-#     e["category_id"]=int(preds[i])+1
-#     new_json.append(e)
-
-# json.dump(new_json, open(save_path, 'w'), indent=4)
-
-
-
-json_path = '/workspace/item_box_competition/data/validation.json'
+json_path = '/workspace/Future_technology/detection/SKU110K-DenseDet/out.bbox.json'
 save_path= "/workspace/item_box_competition/model/result_bbox.json"
-anns=json.load(open(json_path, 'r',encoding='utf-8'))["annotations"]
+anns=json.load(open(json_path, 'r'))
 new_json=[]
 # TODO: 이미지 순서, confidence 순서
 for i, ann in enumerate(test_set.image_paths):
@@ -91,3 +76,18 @@ for i, ann in enumerate(test_set.image_paths):
     new_json.append(e)
 
 json.dump(new_json, open(save_path, 'w'), indent=4)
+
+
+
+# json_path = '/workspace/item_box_competition/data/validation.json'
+# save_path= "/workspace/item_box_competition/model/result_bbox.json"
+# anns=json.load(open(json_path, 'r',encoding='utf-8'))["annotations"]
+# new_json=[]
+# # TODO: 이미지 순서, confidence 순서
+# for i, ann in enumerate(test_set.image_paths):
+#     ann_id=int(ann.split('/')[-1][:4])
+#     e=anns[ann_id]
+#     e["category_id"]=int(preds[i])+1
+#     new_json.append(e)
+
+# json.dump(new_json, open(save_path, 'w'), indent=4)

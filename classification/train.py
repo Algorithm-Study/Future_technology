@@ -12,6 +12,7 @@ from tqdm import tqdm
 import pandas as pd
 from albumentations.pytorch import ToTensorV2
 from dataset import TrainDataset, TestDataset,ValDataset
+from imbalanced_sampler import ImbalancedDatasetSampler
 
 def seed_config(seed):
     # https://hoya012.github.io/blog/reproducible_pytorch/
@@ -26,19 +27,20 @@ def seed_config(seed):
 #  Hyperparameters
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-LEARNING_RATE=0.001
+LEARNING_RATE=0.0005 #1e-4~1e-5
 BATCH_SIZE = 16
-EPOCHS = 100
-VAL_INTERVAL=1
+EPOCHS = 500
+VAL_INTERVAL=2
 SEED=777
 CLASS_NUM=100
+IMAGE_SIZE=448
 seed_config(SEED)
 ####################
 
 # height : 120, width : 81
 transform_train=A.Compose([
-    A.RandomResizedCrop(height = 224, width = 224, scale=(0.1, 1.0), ratio=(0.66, 1.33),interpolation=cv2.INTER_CUBIC,always_apply=True),
-    # A.Resize(224, 224, interpolation=cv2.INTER_CUBIC),
+    A.RandomResizedCrop(height = IMAGE_SIZE, width = IMAGE_SIZE, scale=(0.1, 1.0), ratio=(0.66, 1.33),interpolation=cv2.INTER_CUBIC,always_apply=True),
+    # A.Resize(IMAGE_SIZE, IMAGE_SIZE, interpolation=cv2.INTER_CUBIC),
     A.HorizontalFlip(),
     A.VerticalFlip(),
     A.Normalize(),
@@ -46,7 +48,7 @@ transform_train=A.Compose([
 ])
 
 transform_val=A.Compose([
-    A.Resize(224, 224, interpolation=cv2.INTER_CUBIC),
+    A.Resize(IMAGE_SIZE, IMAGE_SIZE, interpolation=cv2.INTER_CUBIC),
     A.Normalize(),
     ToTensorV2(),
 ])
@@ -54,7 +56,7 @@ transform_val=A.Compose([
 # Loaders
 df_1=pd.read_csv('/workspace/item_box_competition/data/train_cropped.csv')
 trainset = TrainDataset(df_1, transform_train)
-trainLoader = torch.utils.data.DataLoader(trainset, batch_size = BATCH_SIZE, shuffle = True, num_workers = multiprocessing.cpu_count() // 2,pin_memory=True) 
+trainLoader = torch.utils.data.DataLoader(trainset, batch_size = BATCH_SIZE,sampler=ImbalancedDatasetSampler(trainset), num_workers = multiprocessing.cpu_count() // 2,pin_memory=True) 
 df_2=pd.read_csv('/workspace/item_box_competition/data/val_cropped.csv')
 valset = ValDataset(df_2, transform_val)
 valLoader = torch.utils.data.DataLoader(valset, batch_size = BATCH_SIZE, shuffle = False, num_workers = multiprocessing.cpu_count() // 2,pin_memory=True)

@@ -1,3 +1,4 @@
+# cropping model output bbox
 import cv2
 import json
 import os

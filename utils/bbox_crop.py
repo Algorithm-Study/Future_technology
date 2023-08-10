@@ -1,3 +1,5 @@
+# cropping for validation image
+
 import cv2
 import json
 import os
