@@ -41,13 +41,13 @@ class ValDataset(Dataset):
     def __len__(self):
         return len(self.image_paths)
 
-# TO-DO: change this 
+
 class TestDataset(Dataset):
 
 
-    def __init__(self,df, transform):
+    def __init__(self,transform,image_folder="/workspace/item_box_competition/data/test_cropped"):
         self.transform=transform
-        self.image_paths=[os.path.join("/workspace/eval", img_id) for img_id in df['ImageID']]
+        self.image_paths=sorted([os.path.join(image_folder,name) for name in os.listdir(image_folder)])
 
     def __getitem__(self, index):
         image = cv2.imread(self.image_paths[index])

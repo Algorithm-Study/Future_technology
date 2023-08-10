@@ -14,7 +14,7 @@ def crop_and_save_images(json_path, image_dir, output_dir, csv_filename):
     classes = []
     filenames = []
     # Loop through each annotation
-    for annotation in coco_data['annotations']:
+    for idx, annotation in enumerate(coco_data['annotations']):
         image_id = annotation['image_id']
         image_filename = coco_data['images'][image_id-1]['file_name']
         bbox = annotation['bbox']
@@ -29,7 +29,7 @@ def crop_and_save_images(json_path, image_dir, output_dir, csv_filename):
         cropped_image = image[y:y + h, x:x + w]
 
         # Save the cropped image
-        output_filename = f"cropped_{annotation['id']}_{image_filename}"
+        output_filename = f"{idx:0>4d}.jpg"
         print(output_filename)
         output_path = os.path.join(output_dir, output_filename)
         cv2.imwrite(output_path, cropped_image)
@@ -43,7 +43,7 @@ def crop_and_save_images(json_path, image_dir, output_dir, csv_filename):
 if __name__ == "__main__":
     json_path = "/workspace/item_box_competition/data/validation.json"
     image_dir = "/workspace/item_box_competition/data/validation"
-    output_dir = "/workspace/item_box_competition/data/validation_crawled"
-    csv_filename = 'val_cropped_real.csv'
+    output_dir = "/workspace/item_box_competition/data/test_cropped"
+    csv_filename = 'test_cropped_real.csv'
     
     crop_and_save_images(json_path, image_dir, output_dir, csv_filename)

@@ -31,6 +31,7 @@ BATCH_SIZE = 16
 EPOCHS = 100
 VAL_INTERVAL=1
 SEED=777
+CLASS_NUM=100
 seed_config(SEED)
 ####################
 
@@ -53,13 +54,13 @@ transform_val=A.Compose([
 # Loaders
 df_1=pd.read_csv('/workspace/item_box_competition/data/train_cropped.csv')
 trainset = TrainDataset(df_1, transform_train)
-trainLoader = torch.utils.data.DataLoader(trainset, batch_size = BATCH_SIZE, shuffle = True, num_workers = multiprocessing.cpu_count() // 2) 
+trainLoader = torch.utils.data.DataLoader(trainset, batch_size = BATCH_SIZE, shuffle = True, num_workers = multiprocessing.cpu_count() // 2,pin_memory=True) 
 df_2=pd.read_csv('/workspace/item_box_competition/data/val_cropped.csv')
 valset = ValDataset(df_2, transform_val)
-valLoader = torch.utils.data.DataLoader(valset, batch_size = BATCH_SIZE, shuffle = False, num_workers = multiprocessing.cpu_count() // 2)
+valLoader = torch.utils.data.DataLoader(valset, batch_size = BATCH_SIZE, shuffle = False, num_workers = multiprocessing.cpu_count() // 2,pin_memory=True)
 
 model=models.resnet50(pretrained=True).to(device)
-model.fc=nn.Linear(2048, 100).to(device)
+model.fc=nn.Linear(2048, CLASS_NUM).to(device)
 
 criterion=nn.CrossEntropyLoss()
 optimizer=torch.optim.Adam(model.parameters(),lr=LEARNING_RATE)
