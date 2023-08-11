@@ -14,7 +14,7 @@
 
 ## 예선 진행 시나리오(시나리오를 기반으로 모델 프로세스 파이프라인 작성)
 **제약 사항: 이미지당 30초 이내 및 Detection 과정이 5분 안에 달성해야 함**
-1. SKU110K Cascade RCNN으로 이미지 속 존재하는 상품 객체를 인식해서 Cropped된 데이터셋 생성
+1. SKU110K Cascade RCNN으로 이미지 속 존재하는 상품 객체를 bbox를 인식해서 Cropped된 데이터셋 생성
 2. 분류모델을 활용해서 Cropped된 이미지에 대해 분류 진행
 3. 분류 결과를 바탕으로 검출 bbox간 통합 과정을 거침
 4. 이후 통합된 bbox에 대해서 GT와의 IOU 계산
@@ -29,7 +29,9 @@
 | LR=0.001 IMGSIZE=224  |           32           |
 | LR=0.0005 IMGSIZE=224 |     35 at 45 epoch     |
 | LR=0.0005 IMGSIZE=448 |     25 at 46 epoch     |
-|                       |                        |
+| LR=0.0001 IMGSIZe=224 |      61 at ?           |
 
 
 ## 참고 자료
+[Pytorch 1.2.0](https://pytorch.org/docs/1.2.0/torchvision/models.html?highlight=models)
+[mmdet v1.0rc1](https://github.com/open-mmlab/mmdetection/blob/v1.0rc1/docs/INSTALL.md)

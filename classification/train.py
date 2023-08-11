@@ -13,6 +13,7 @@ import pandas as pd
 from albumentations.pytorch import ToTensorV2
 from dataset import TrainDataset, TestDataset,ValDataset
 from imbalanced_sampler import ImbalancedDatasetSampler
+from model import model_import
 
 def seed_config(seed):
     # https://hoya012.github.io/blog/reproducible_pytorch/
@@ -26,7 +27,7 @@ def seed_config(seed):
 
 #  Hyperparameters
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+MODEL = 'ResNet50'
 LEARNING_RATE=0.0001 #1e-4~1e-5
 BATCH_SIZE = 16
 EPOCHS = 500
@@ -61,8 +62,7 @@ df_2=pd.read_csv('/workspace/item_box_competition/data/val_cropped.csv')
 valset = ValDataset(df_2, transform_val)
 valLoader = torch.utils.data.DataLoader(valset, batch_size = BATCH_SIZE, shuffle = False, num_workers = multiprocessing.cpu_count() // 2,pin_memory=True)
 
-model=models.resnet50(pretrained=True).to(device)
-model.fc=nn.Linear(2048, CLASS_NUM).to(device)
+model= model_import(MODEL).to(device)
 
 criterion=nn.CrossEntropyLoss()
 optimizer=torch.optim.Adam(model.parameters(),lr=LEARNING_RATE)
