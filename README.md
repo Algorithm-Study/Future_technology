@@ -13,6 +13,7 @@
     : 100개의 클래스(오프라인 예선 이전) + 5개의 추가 크래스(예선)
 
 ## 예선 진행 시나리오(시나리오를 기반으로 모델 프로세스 파이프라인 작성)
+**제약 사항: 이미지당 30초 이내 및 Detection 과정이 5분 안에 달성해야 함**
 1. SKU110K Cascade RCNN으로 이미지 속 존재하는 상품 객체를 인식해서 Cropped된 데이터셋 생성
 2. 분류모델을 활용해서 Cropped된 이미지에 대해 분류 진행
 3. 분류 결과를 바탕으로 검출 bbox간 통합 과정을 거침
@@ -21,11 +22,14 @@
 
 ## 대회 준비 기록
 
-## 참고 자료
-
+## 모델 학습 기록
+### Classification for Cropped image dataset
 |      Description      | Performance (Accuracy) |
 | :-------------------: | :--------------------: |
 | LR=0.001 IMGSIZE=224  |           32           |
 | LR=0.0005 IMGSIZE=224 |     35 at 45 epoch     |
 | LR=0.0005 IMGSIZE=448 |     25 at 46 epoch     |
 |                       |                        |
+
+
+## 참고 자료
