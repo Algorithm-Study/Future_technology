@@ -32,12 +32,14 @@ for image in imgs['images']:
     picture = Image.open("image")
     width,height = picture.size
     cell_state = [[[] for _ in range(width//Y_GRID)] for _ in range(height//X_GRID)]
-    for x in range(0,height,height//X_GRID):
-        for y in range(0, width, width//Y_GRID):
-            
-            
+    # 객체를 각 grid에 넣어줌
+    for i, bbox in enumerate(bbox_json_path):
+        cell_state[bbox['bbox'][0]//X_GRID][bbox['bbox'][1]//Y_GRID].append((bbox['category_id'], *bbox['bbox']))
+                 
     # TODO: 일정 거리내에 존재하면 같은 그룹으로 처리
-    
+    for x in range(height//X_GRID):
+        for y in range(width//Y_GRID):
+            cell_state.sort(key = lambda x : x[0])
     
     # TODO: 인접한 거리 내에 존재한 애들끼리 묶어서 병합
     for cat in categories.keys():
