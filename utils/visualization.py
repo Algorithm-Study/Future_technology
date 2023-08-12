@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from tqdm import tqdm
 annotation_file="/workspace/item_box_competition/data/validation.json"
-bbox_file="/workspace/item_box_competition/model/result_bbox.json"
+# bbox_file="/workspace/item_box_competition/model/result_bbox.json"
+bbox_file="/workspace/item_box_competition/model/result_merged_bbox.json"
 image_prefix="/workspace/item_box_competition/data/validation/"
 
 

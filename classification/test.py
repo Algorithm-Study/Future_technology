@@ -24,7 +24,7 @@ def seed_config(seed):
 
 SEED=777
 BATCH_SIZE=16
-MODEL_PATH='/workspace/item_box_competition/model/resnet50_32.pth'
+MODEL_PATH='/workspace/item_box_competition/model/resnet50_61.pth'
 seed_config(SEED)
 
 
@@ -77,6 +77,8 @@ for i, ann in enumerate(test_set.image_paths):
 
 json.dump(new_json, open(save_path, 'w'), indent=4)
 
+
+# classification 성능 테스트 용
 
 
 # json_path = '/workspace/item_box_competition/data/validation.json'
