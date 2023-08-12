@@ -23,8 +23,8 @@ def union(a, b,parent):
         parent[a] = b
 
 MAX_BOUNDING_BOXES = 5
-X_GRID = 10
-Y_GRID = 19
+X_GRID = 2
+Y_GRID = 5
 SAME_GROUP_DISTANCE=5
 CLASS_NUM=100
 # 0 means combination, 1 means merge everything
@@ -37,6 +37,7 @@ result_json_path="/workspace/item_box_competition/model/result_merged_bbox.json"
 # Categories 한 이미지 내 식별된 객체 순서, 분류 score 포함
 result_file=[]
 imgs=json.load(open(test_json_path,"r",encoding="utf-8"))
+
 for image in tqdm(imgs['images']):
     id=image['id']
 
@@ -47,14 +48,15 @@ for image in tqdm(imgs['images']):
     CELL_Y = ceil(height//Y_GRID)
     cell_state = [[[[] for _ in range(CLASS_NUM+1)] for _ in range(Y_GRID + 1)] for _ in range(X_GRID + 1)]
     # 객체를 각 grid에 넣어줌(x,y,w,h)
-    # x_cord, y_cord -> 그리드 내 위치
+    # x_cord, y_cord -> 그리드 내 위치c
     for i, bbox in enumerate(json.load(open(bbox_json_path,"r",encoding="utf-8"))):
-        x_cord=int((bbox['bbox'][0]+bbox['bbox'][2]//2)//CELL_X)
-        y_cord=int((bbox['bbox'][1]+bbox['bbox'][3]//2)//CELL_Y)
-        if x_cord==8 and y_cord==8:
-            print("Yes")
-        category=bbox['category_id']
-        cell_state[x_cord][y_cord][category].append((bbox['score'],bbox['bbox'][0],bbox['bbox'][1],bbox['bbox'][2],bbox['bbox'][3]))
+        if bbox['image_id']==id:
+            x_cord=int((bbox['bbox'][0]+bbox['bbox'][2]//2)//CELL_X)
+            y_cord=int((bbox['bbox'][1]+bbox['bbox'][3]//2)//CELL_Y)
+            #if x_cord==8 and y_cord==8:
+            #    print("Yes")
+            category=bbox['category_id']
+            cell_state[x_cord][y_cord][category].append((bbox['score'],bbox['bbox'][0],bbox['bbox'][1],bbox['bbox'][2],bbox['bbox'][3]))
                
     # # TODO: 일정 거리내에 존재하면 같은 그룹으로 처리(레이블:1번~100번으로 존재)
     # for c in range(1,CLASS_NUM+1):
@@ -64,8 +66,6 @@ for image in tqdm(imgs['images']):
     #             for k in range(len(cell_state[x][y][c])):
     #                 nodes.append((x,y,k))
     #     parent=list(range(len(nodes)))
-            
-    
     if MODE ==0:
         # Combination
         for c in range(1,CLASS_NUM+1): #100
@@ -73,7 +73,7 @@ for image in tqdm(imgs['images']):
                 for y in range(Y_GRID + 1): #CELl_Y+1
                     l=len(cell_state[x][y][c])
                     if l==0:
-                        break
+                        continue
                     for k in range(1,l+1): # max 6?
                         for comb in combinations(cell_state[x][y][c],k):
                             min_x=float('inf')
@@ -96,24 +96,23 @@ for image in tqdm(imgs['images']):
             for x in range(X_GRID + 1):
                 for y in range(Y_GRID + 1):
                     l=len(cell_state[x][y][c])
-                    if x==8 and y==8:
-                        print(cell_state[x][y][c])
-                        print("Hello")
                     if l==0:
-                        break
-                    min_x=float('inf')
-                    min_y=float('inf')
-                    max_x=0
-                    max_y=0
-                    for e in cell_state[x][y][c]:
-                        # print(e)
-                        min_x=min(min_x,e[1])
-                        max_x=max(max_x,e[1]+e[3])
-                        min_y=min(min_y,e[2])
-                        max_y=max(max_y,e[2]+e[4])
-                    w=max_x-min_x
-                    h=max_y-min_y
-                    result_file.append({"image_id": id,
-                                        "bbox": [min_x, min_y, w,h],
-                                        "category_id": c})
+                        continue
+                    else:
+                        min_x=float('inf')
+                        min_y=float('inf')
+                        max_x=0
+                        max_y=0
+                        for e in cell_state[x][y][c]:
+                            #print(e)
+                            min_x = min(min_x,e[1])
+                            max_x = max(max_x,e[1]+e[3])
+                            min_y = min(min_y,e[2])
+                            max_y = max(max_y,e[2]+e[4])
+                        w=max_x-min_x
+                        h=max_y-min_y
+                        result_file.append({"image_id": id,
+                                            "bbox": [min_x, min_y, w,h],
+                                            "category_id": c})
+                        
 json.dump(result_file,open(result_json_path, 'w'), indent=4)
