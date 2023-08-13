@@ -28,10 +28,10 @@ def seed_config(seed):
 #  Hyperparameters
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 MODEL = 'ResNet50'
-LEARNING_RATE=0.0001 #1e-4~1e-5
-BATCH_SIZE = 16
+LEARNING_RATE=0.00001 #1e-4~1e-5
+BATCH_SIZE = 32
 EPOCHS = 500
-VAL_INTERVAL=2
+VAL_INTERVAL=1
 SEED=777
 CLASS_NUM=100
 IMAGE_SIZE=224

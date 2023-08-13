@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from tqdm import tqdm
 annotation_file="/workspace/item_box_competition/data/validation.json"
-bbox_file="/workspace/item_box_competition/model/result_bbox.json"
-# bbox_file="/workspace/item_box_competition/model/result_merged_bbox.json"
+# bbox_file="/workspace/item_box_competition/model/result_bbox.json"
+bbox_file="/workspace/item_box_competition/model/result_merged_bbox.json"
 image_prefix="/workspace/item_box_competition/data/validation/"
 
 
@@ -24,5 +24,5 @@ for i in tqdm(range(1,len(ann['images'])+1)):
             
             ax.add_patch(plt.Rectangle((e['bbox'][0],e['bbox'][1]),e['bbox'][2],e['bbox'][3],fill=False,edgecolor='red',linewidth=1))
             plt.text(e['bbox'][0], e['bbox'][1]-10, e["category_id"], bbox=dict(fill=True, edgecolor='red', linewidth=2))
-    plt.savefig(f'/workspace/eval_not_merged/savefig_default_{i}.png')
+    plt.savefig(f'/workspace/eval/savefig_default_{i}.png')
     plt.close()
