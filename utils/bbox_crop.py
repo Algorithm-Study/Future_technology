@@ -48,4 +48,6 @@ if __name__ == "__main__":
     output_dir = "/workspace/item_box_competition/data/test_cropped"
     csv_filename = 'test_cropped_real.csv'
     
+    for f in os.listdir(output_dir):
+        os.remove(os.path.join(output_dir,f))
     crop_and_save_images(json_path, image_dir, output_dir, csv_filename)

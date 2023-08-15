@@ -1,6 +1,10 @@
 #!/bin/bash
 
-start=`date +%s.%N`
+SECONDS=0
+# create json file for test images
+/opt/conda/bin/python /workspace/Future_technology/utils/create_json.py
+
+echo "Json Creation Done"
 
 # Test images Object Detection
 cd /workspace/Future_technology/detection/SKU110K-DenseDet
@@ -19,11 +23,9 @@ echo "Crop Done"
 
 echo "Classification Done"
 # Merge bboxes which is adjacent to each other
-/opt/conda/bin/python utils/bbox_merge_IOU.py
+/opt/conda/bin/python utils/bbox_merge_by_distance.py
 
 echo "Merge Done"
 
 # Checking Times Spent during full pipeline
-finish=`date +%s.%N`
-diff=$( echo "$finish - $start" | bc -l )
-echo 'diff:' $diff
+echo $SECONDS

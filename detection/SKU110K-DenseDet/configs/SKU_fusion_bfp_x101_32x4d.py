@@ -182,13 +182,13 @@ data = dict(
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file='/workspace/item_box_competition/data/modi_validation.json',
+        ann_file='/workspace/item_box_competition/data/validation.json',
         img_prefix='/workspace/item_box_competition/data/validation/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file='/workspace/item_box_competition/data/modi_validation.json',
-        img_prefix='/workspace/item_box_competition/data/validation/',
+        ann_file='/workspace/item_box_competition/data/test.json',
+        img_prefix='/workspace/item_box_competition/data/test/',
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)

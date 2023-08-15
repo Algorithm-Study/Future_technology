@@ -27,7 +27,7 @@ def seed_config(seed):
 
 #  Hyperparameters
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-MODEL = 'ResNet50'
+MODEL = 'ResNet152'
 LEARNING_RATE=0.00001 #1e-4~1e-5
 BATCH_SIZE = 32
 EPOCHS = 500
@@ -110,7 +110,7 @@ for epoch in range(EPOCHS):
             
             if best_val_acc < val_acc/len(valset)*100:
                 best_val_acc = val_acc/len(valset)*100
-                torch.save(model.state_dict(),'/workspace/item_box_competition/model/resnet50.pth')
+                torch.save(model.state_dict(),f'/workspace/item_box_competition/model/{MODEL}.pth')
                 # save the best_val_acc to txt file
                 with open('/workspace/item_box_competition/model/best_val_acc.txt', 'w') as f:
                     f.write(str(epoch) + "_" + str(best_val_acc))
