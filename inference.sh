@@ -27,5 +27,7 @@ echo "Classification Done"
 
 echo "Merge Done"
 
+# TODO: Calculate IoU and make output data
+
 # Checking Times Spent during full pipeline
 echo $SECONDS
