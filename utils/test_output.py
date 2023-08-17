@@ -1,15 +1,16 @@
 import json
 import pandas as pd
-# TODO: 물품명과 IoU를 txt값을 기준으로 처리
-
-# TODO: 원본 사이즈 이미지 출력해서 저장
+import time
+from tqdm import tqdm
 
 RESULT_JSON_PATH ="/workspace/item_box_competition/model/result_merged_bbox.json"
 TEST_JSON_PATH="/workspace/item_box_competition/data/test.json"
 def calculate_IOU(label,d):
     result_json = json.load(open(RESULT_JSON_PATH, "r",encoding="utf-8"))
     test_json=json.load(open(TEST_JSON_PATH, "r",encoding="utf-8"))
-    for image in test_json["images"]:
+    for image in tqdm(test_json["images"]):
+    # for image in tqdm(range(1,46)):
+        # id=image
         id=image["id"]
         df=pd.DataFrame(columns=["상품명","IoU"])
         for x,y,w,h,c,i in label:
@@ -18,6 +19,7 @@ def calculate_IOU(label,d):
             highest_iou=0
             for pred in result_json:
                 if i==pred["image_id"] and model_label_to_real_label(pred["category_id"],d) == c:
+                # if i==pred["image_id"] and pred["category_id"] == c:
                     # calculate iou
                     real_box_area=w*h
                     pred_box_area=pred["bbox"][2]*pred["bbox"][3]
@@ -31,21 +33,27 @@ def calculate_IOU(label,d):
                     iou=intersection_area/(real_box_area+pred_box_area-intersection_area)
                     highest_iou=max(highest_iou,iou)
             df = df.append({"상품명":d[c][1],"IoU":highest_iou},ignore_index=True)
-        df.to_csv(f"/workspace/item_box_competition/model/result_{id}.csv",index=False,encoding="utf-8")
-        
+        df.to_csv(f"/workspace/item_box_competition/output/result_{id}.csv",index=False,encoding="utf-8")
+        # TODO: 이미지 저장하기
         
     
 
 def get_real_label():
-    x,y,w,h,c,i =312.1711120605469,1221.7757568359375,120.94418334960938,157.3841552734375,5,1
-    # SOME CODE
-    return [[x,y,w,h,c,i]]
+    x,y,w,h,c,i =0,0,0,0,0,0
+    bboxes=[]
+    # test code
+    # result_json = json.load(open(RESULT_JSON_PATH, "r",encoding="utf-8"))
+    # for bbox in result_json:
+    #     bboxes.append((bbox["bbox"][0],bbox["bbox"][1],bbox["bbox"][2],bbox["bbox"][3],bbox["category_id"],bbox["image_id"]))
+
+    # TODO: SOME CODE TO READ TXT INPUT FILE
+    return bboxes
 
 def model_label_to_real_label(num, d):
     return d[num][0]
 
-def model_label_to_real_label(num, d):
-    return d[num][0]
+def model_label_to_real_name(num, d):
+    return d[num][1]
 
 # dict[model_num] = (real_num, real_name)
 def make_label_dict():
@@ -61,8 +69,10 @@ def make_label_dict():
     return idx_name_dict
 
 def main():
+    t=time.time()
     label=get_real_label()
     d=make_label_dict()
     calculate_IOU(label,d)
+    print()
 
 main()
