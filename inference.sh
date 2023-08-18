@@ -27,7 +27,9 @@ echo "Classification Done"
 
 echo "Merge Done"
 
-# TODO: Calculate IoU and make output data
+# Draw result image and prediction info txt
+/opt/conda/bin/python utils/test_output.py
+echo "Drawing result image and prediction info txt are done"
 
 # Checking Times Spent during full pipeline
 echo $SECONDS
