@@ -41,7 +41,10 @@ def is_near(a : tuple, b: tuple) -> bool:
 
 def merge_bbox(same_group: list):
     if MODE ==0:
-        l=len(same_group) 
+        l=len(same_group)
+        # sort by score decreasing
+        same_group.sort(key=lambda x: x[0],reverse=True)
+        same_group=same_group[:min(MAX_COMBINATION,l)]
         for k in range(1,l+1): # max 6?
             for comb in combinations(same_group,k):
                 min_x=float('inf')
@@ -83,6 +86,7 @@ X_GRID = 2
 Y_GRID = 5
 SAME_GROUP_DISTANCE=50
 CLASS_NUM=100
+MAX_COMBINATION=5
 # 0 means combination, 1 means merge everything
 MODE=0
 # Json import

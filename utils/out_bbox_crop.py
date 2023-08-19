@@ -46,10 +46,10 @@ if __name__ == "__main__":
     # 테스트 데이터 모델 결과
     test_output_json_path = "/workspace/Future_technology/detection/SKU110K-DenseDet/out.bbox.json"
     # 정답이 있는 테스트 데이터
-    test_label_json_path = "/workspace/item_box_competition/data/validation.json"
-    image_dir = "/workspace/item_box_competition/data/validation"
+    test_label_json_path = "/workspace/item_box_competition/data/test.json"
+    image_dir = "/workspace/item_box_competition/data/test"
     output_dir = "/workspace/item_box_competition/data/test_cropped"
-    score_threshold = 0.6
+    score_threshold = 0.15
     
     crop_and_save_images(test_output_json_path, test_label_json_path, image_dir, output_dir, score_threshold)
     

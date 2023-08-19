@@ -10,8 +10,8 @@ TEST_JSON_PATH="/workspace/item_box_competition/data/test.json"
 result_json = json.load(open(RESULT_JSON_PATH, "r",encoding="utf-8"))
 test_json=json.load(open(TEST_JSON_PATH, "r",encoding="utf-8"))
 
+# IOU 계산 코드
 def calculate_IOU(label,d):
-    
     answer_cnt=0
     for image in tqdm(test_json["images"]):
     # for image in tqdm(range(1,46)):
@@ -25,8 +25,8 @@ def calculate_IOU(label,d):
             highest_iou=0
             poss_best_bbox=None
             for pred in result_json:
-                if i==pred["image_id"] and model_label_to_real_label(pred["category_id"],d) == c:
-                # if i==pred["image_id"] and pred["category_id"] == c:
+                # if i==pred["image_id"] and model_label_to_real_label(pred["category_id"],d) == c:
+                if i==pred["image_id"] and pred["category_id"] == c:
                     # calculate iou
                     real_box_area=w*h
                     pred_box_area=pred["bbox"][2]*pred["bbox"][3]
@@ -50,7 +50,7 @@ def calculate_IOU(label,d):
         df.to_csv(f"/workspace/item_box_competition/output/{file_name}_predicted.csv",index=False,encoding="utf-8")
         save_image_with_bbox(bounding_boxes_to_draw,id)
     print(f"Right bbox: {answer_cnt} / Total bbox:  {len(label)}")
-    print(f"Accuracy: {answer_cnt/len(label):.2f}")
+    print(f"Accuracy: {answer_cnt/len(label):.4f}")
     
 
 def save_image_with_bbox(bboxes,id):
