@@ -81,10 +81,9 @@ def merge_bbox(same_group: list):
                             "category_id": c})
     
 
-MAX_BOUNDING_BOXES = 5
 SAME_GROUP_DISTANCE=50
 CLASS_NUM=100
-MAX_COMBINATION=5
+MAX_COMBINATION=10
 # 0 means combination, 1 means merge everything
 MODE=0
 # Json import

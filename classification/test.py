@@ -24,7 +24,7 @@ def seed_config(seed):
 
 SEED=777
 BATCH_SIZE=16
-MODEL_PATH='/workspace/item_box_competition/model/resnet50_59_08.pth'
+MODEL_PATH='/workspace/item_box_competition/model/resnet50_62_71.pth'
 CLASS_NUM=100
 seed_config(SEED)
 

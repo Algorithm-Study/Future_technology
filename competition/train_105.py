@@ -38,7 +38,7 @@ seed_config(SEED)
 ####################
 
 transform_train=A.Compose([
-    A.RandomResizedCrop(height = IMAGE_SIZE, width = IMAGE_SIZE, scale=(0.4, 1.0), ratio=(0.66, 1.33),interpolation=cv2.INTER_CUBIC,always_apply=True),
+    A.RandomResizedCrop(height = IMAGE_SIZE, width = IMAGE_SIZE, scale=(0.1, 1.0), ratio=(0.66, 1.33),interpolation=cv2.INTER_CUBIC,always_apply=True),
     # A.Resize(IMAGE_SIZE, IMAGE_SIZE, interpolation=cv2.INTER_CUBIC),
     A.HorizontalFlip(),
     A.VerticalFlip(),

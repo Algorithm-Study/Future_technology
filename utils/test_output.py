@@ -43,7 +43,8 @@ def calculate_IOU(label,d):
                         poss_best_bbox=(pred["bbox"][0],pred["bbox"][1],pred["bbox"][2],pred["bbox"][3],c)
             if highest_iou>=0.5:
                 answer_cnt+=1
-            df = df.append({"상품명":d[c][1],"IoU":highest_iou},ignore_index=True)
+            if highest_iou>0:
+                df = df.append({"상품명":d[c][1],"IoU":highest_iou},ignore_index=True)
             if poss_best_bbox!=None:
                 bounding_boxes_to_draw.append(poss_best_bbox)
         file_name=image["file_name"].split(".")[0]
