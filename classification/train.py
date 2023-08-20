@@ -27,7 +27,7 @@ def seed_config(seed):
 
 #  Hyperparameters
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-MODEL = 'EfficientNet_B2'
+MODEL = 'ResNet50'
 LEARNING_RATE=0.0001 #1e-4~1e-5
 BATCH_SIZE = 16
 EPOCHS = 200

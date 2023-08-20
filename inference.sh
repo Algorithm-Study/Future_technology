@@ -1,6 +1,11 @@
 #!/bin/bash
 
 SECONDS=0
+# reset output folder and crop folder
+/opt/conda/bin/python /workspace/Future_technology/utils/reset.py
+
+echo "Reset Done"
+
 # create json file for test images
 /opt/conda/bin/python /workspace/Future_technology/utils/create_json.py
 

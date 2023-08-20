@@ -24,15 +24,16 @@
 
 ## 모델 학습 기록
 ### Classification for Cropped image dataset
-|      Description       | Performance (Accuracy) |
-| :--------------------: | :--------------------: |
-|  LR=0.001 IMGSIZE=224  |        32 at ?         |
-| LR=0.0005 IMGSIZE=224  |     35 at 45 epoch     |
-| LR=0.0005 IMGSIZE=448  |     25 at 46 epoch     |
-| LR=0.0001 IMGSIZE=224  |        61 at ?         |
-| LR=0.00001 IMGSIZE=224 |   62.04 at 149 epoch   |
-
-
+|      Description       | Performance (Accuracy) | Final Score |
+| :--------------------: | :--------------------: | :--------------------: |
+|  LR=0.001 IMGSIZE=224  |        32 at ?         |         -              |
+| LR=0.0005 IMGSIZE=224  |     35 at 45 epoch     |         -              |
+| LR=0.0005 IMGSIZE=448  |     25 at 46 epoch     |         -              |
+| LR=0.0001 IMGSIZE=224  |        61 at ?         | 0.52 at 0.15 threshold  |
+| LR=0.00001 IMGSIZE=224 |   62.04 at 149 epoch   | 0.29 at 0.6 threshold   |
+| LR=0.0001 IMGSIZE=224, scale(0.4~1.0)  | 63.37 at 34 epoch|     0.5052 at 0.15 threshold |
+| LR=0.0001 IMGSIZE=224, scale(0.6~1.0)  | 61.72 at 22 epoch|     0.4688 at 0.15 threshold |
+| LR=0.0001 IMGSIZE=224, scale(0.3~1.0)  | 59.08 at 22 epoch|     0.4583 at 0.15 threshold |
 
 ## 참고 자료
 [Pytorch 1.2.0](https://pytorch.org/docs/1.2.0/torchvision/models.html?highlight=models)
