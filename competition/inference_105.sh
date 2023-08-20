@@ -7,7 +7,7 @@ SECONDS=0
 echo "Reset Done"
 
 # create json file for test images
-/opt/conda/bin/python /workspace/Future_technology/utils/create_json.py
+/opt/conda/bin/python /workspace/Future_technology/competition/create_json_105.py
 
 echo "Json Creation Done"
 
@@ -24,11 +24,11 @@ cd /workspace/Future_technology
 echo "Crop Done"
 # Classification with cropped dataset 
 
-/opt/conda/bin/python /workspace/Future_technology/classification/test.py
+/opt/conda/bin/python /workspace/Future_technology/competition/test_105.py
 
 echo "Classification Done"
 # Merge bboxes which is adjacent to each other
-/opt/conda/bin/python /workspace/Future_technology/utils/bbox_merge_by_distance.py
+/opt/conda/bin/python /workspace/Future_technology/competition/bbox_merge_by_distance_105.py
 
 echo "Merge Done"
 
@@ -37,4 +37,4 @@ echo "Merge Done"
 echo "Drawing result image and prediction info txt are done"
 
 # Checking Times Spent during full pipeline
-echo $SECONDS
+echo $SECONDS[]

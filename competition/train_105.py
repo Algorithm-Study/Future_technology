@@ -13,7 +13,6 @@ import pandas as pd
 from albumentations.pytorch import ToTensorV2
 from dataset import TrainDataset, TestDataset,ValDataset
 from imbalanced_sampler import ImbalancedDatasetSampler
-from model import model_import
 
 def seed_config(seed):
     # https://hoya012.github.io/blog/reproducible_pytorch/
@@ -33,13 +32,13 @@ BATCH_SIZE = 16
 EPOCHS = 200
 VAL_INTERVAL=1
 SEED=777
-CLASS_NUM=100
+CLASS_NUM=105
 IMAGE_SIZE=224
 seed_config(SEED)
 ####################
 
 transform_train=A.Compose([
-    A.RandomResizedCrop(height = IMAGE_SIZE, width = IMAGE_SIZE, scale=(0.1, 1.0), ratio=(0.66, 1.33),interpolation=cv2.INTER_CUBIC,always_apply=True),
+    A.RandomResizedCrop(height = IMAGE_SIZE, width = IMAGE_SIZE, scale=(0.4, 1.0), ratio=(0.66, 1.33),interpolation=cv2.INTER_CUBIC,always_apply=True),
     # A.Resize(IMAGE_SIZE, IMAGE_SIZE, interpolation=cv2.INTER_CUBIC),
     A.HorizontalFlip(),
     A.VerticalFlip(),
@@ -54,14 +53,15 @@ transform_val=A.Compose([
 ])
 ####################
 # Loaders
-df_1=pd.read_csv('/workspace/item_box_competition/data/train_cropped.csv')
+df_1=pd.read_csv('/workspace/item_box_competition/data/train_cropped_105.csv')
 trainset = TrainDataset(df_1, transform_train)
 trainLoader = torch.utils.data.DataLoader(trainset, batch_size = BATCH_SIZE,sampler=ImbalancedDatasetSampler(trainset), num_workers = multiprocessing.cpu_count() // 2,pin_memory=True) 
 df_2=pd.read_csv('/workspace/item_box_competition/data/val_cropped.csv')
 valset = ValDataset(df_2, transform_val)
 valLoader = torch.utils.data.DataLoader(valset, batch_size = BATCH_SIZE, shuffle = False, num_workers = multiprocessing.cpu_count() // 2,pin_memory=True)
 
-model= model_import(MODEL).to(device)
+model=models.resnet50(pretrained=True).to(device)
+model.fc=nn.Linear(2048, CLASS_NUM).to(device)
 
 criterion=nn.CrossEntropyLoss()
 optimizer=torch.optim.Adam(model.parameters(),lr=LEARNING_RATE)
@@ -109,7 +109,7 @@ for epoch in range(EPOCHS):
             
             if best_val_acc < val_acc/len(valset)*100:
                 best_val_acc = val_acc/len(valset)*100
-                torch.save(model.state_dict(),f'/workspace/item_box_competition/model/{MODEL}.pth')
+                torch.save(model.state_dict(),f'/workspace/item_box_competition/model/105_{MODEL}.pth')
                 # save the best_val_acc to txt file
                 with open('/workspace/item_box_competition/model/best_val_acc.txt', 'w') as f:
                     f.write(str(epoch) + "_" + str(best_val_acc))
