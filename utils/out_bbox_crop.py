@@ -49,7 +49,7 @@ if __name__ == "__main__":
     test_label_json_path = "/workspace/item_box_competition/data/test.json"
     image_dir = "/workspace/item_box_competition/data/test"
     output_dir = "/workspace/item_box_competition/data/test_cropped"
-    SCORE_THRESHOLD = 0.15
+    SCORE_THRESHOLD = 0
     
     crop_and_save_images(test_output_json_path, test_label_json_path, image_dir, output_dir, SCORE_THRESHOLD)
     

@@ -24,15 +24,14 @@ def seed_config(seed):
 
 SEED=777
 BATCH_SIZE=16
-MODEL_PATH='/workspace/item_box_competition/model/resnet50_62_71.pth'
-CLASS_NUM=100
+MODEL_PATH='/workspace/item_box_competition/model/resnet50_61.pth'
 seed_config(SEED)
 
 
 device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model=models.resnet50(pretrained=True).to(device)
-model.fc=nn.Linear(2048, CLASS_NUM).to(device)
+model.fc=nn.Linear(2048, 100).to(device)
 
 # load model's state_dict
 model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
