@@ -17,7 +17,7 @@ def calculate_IOU(label,d):
     # for image in tqdm(range(1,46)):
         # id=image
         id=image["id"]
-        df=pd.DataFrame(columns=["상품명","IoU"])
+        df=pd.DataFrame(columns=["상품명","IoU","BBox"])
         bounding_boxes_to_draw=[]
         for x,y,w,h,c,i in label:
             if id!=i:
@@ -25,8 +25,8 @@ def calculate_IOU(label,d):
             highest_iou=0
             poss_best_bbox=None
             for pred in result_json:
-                # if i==pred["image_id"] and model_label_to_real_label(pred["category_id"],d) == c:
-                if i==pred["image_id"] and pred["category_id"] == c:
+                if i==pred["image_id"] and model_label_to_real_label(pred["category_id"],d) == c:
+                # if i==pred["image_id"] and pred["category_id"] == c:
                     # calculate iou
                     real_box_area=w*h
                     pred_box_area=pred["bbox"][2]*pred["bbox"][3]
@@ -44,7 +44,7 @@ def calculate_IOU(label,d):
             if highest_iou>=0.5:
                 answer_cnt+=1
             if highest_iou>0:
-                df = df.append({"상품명":d[c][1],"IoU":highest_iou},ignore_index=True)
+                df = df.append({"상품명":c,"IoU":str(round(highest_iou,2)), "BBOx": f"{poss_best_bbox[0]} {poss_best_bbox[1]} {poss_best_bbox[2]} {poss_best_bbox[3]}"},ignore_index=True)
             if poss_best_bbox!=None:
                 bounding_boxes_to_draw.append(poss_best_bbox)
         file_name=image["file_name"].split(".")[0]

@@ -8,7 +8,7 @@ class TrainDataset(Dataset):
 
     def __init__(self,df, transform):
         self.transform=transform
-        self.image_paths=[os.path.join("/workspace/item_box_competition/data/train_cropped_105", img_name) for img_name in df['file_name']]
+        self.image_paths=[os.path.join("/workspace/item_box_competition/data/train_cropped", img_name) for img_name in df['file_name']]
         self.classes=df['category']
 
     def __getitem__(self, index):
